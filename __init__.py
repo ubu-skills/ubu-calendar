@@ -3,7 +3,7 @@
 import sys
 from datetime import datetime, timedelta
 from mycroft import MycroftSkill, intent_handler # type: ignore
-sys.path.append("/usr/lib")
+sys.path.append("/usr/lib/UBUVoiceAssistant")
 from UBUVoiceAssistant.util import util # type: ignore
 from UBUVoiceAssistant.model.event import Event # type: ignore
 
