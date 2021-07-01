@@ -28,7 +28,10 @@ class UbuCalendarSkill(MycroftSkill):
     def handle_upcoming_events_intent(self, message):
         events = self.web_service.get_calendar_upcoming_view()
         events = [str(Event(event)) for event in events['events']]
-        self.speak(util.text_to_speech(events))
+        if len(events) == 0:
+            self.speak_dialog("no.events.dialog")
+        else:
+            self.speak(util.text_to_speech(events))
 
     @intent_handler('DayEvents.intent')
     def handle_day_events_intent(self, message):
@@ -36,7 +39,10 @@ class UbuCalendarSkill(MycroftSkill):
         events = self.web_service.get_calendar_day_view(str(message.data['year']), self.month,
             str(message.data['day']))
         events = [str(Event(event)) for event in events['events']]
-        self.speak(util.text_to_speech(events))
+        if len(events) == 0:
+            self.speak_dialog("no.events.dialog")
+        else:
+            self.speak(util.text_to_speech(events))
 
     @intent_handler('CourseEvents.intent')
     def handle_course_events_intent(self, message):
@@ -52,7 +58,10 @@ class UbuCalendarSkill(MycroftSkill):
                 course.set_events(course_events)
 
             course_events = [str(event) for event in course_events]
-            self.speak(util.text_to_speech(course_events))
+            if len(course_events) == 0:
+                self.speak_dialog("no.events.dialog")
+            else:
+                self.speak(util.text_to_speech(course_events))
         else:
             self.speak_dialog('no.course')
 
