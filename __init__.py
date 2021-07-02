@@ -29,7 +29,7 @@ class UbuCalendarSkill(MycroftSkill):
         events = self.web_service.get_calendar_upcoming_view()
         events = [str(Event(event)) for event in events['events']]
         if len(events) == 0:
-            self.speak_dialog("no.events.dialog")
+            self.speak_dialog("no.events")
         else:
             self.speak(util.text_to_speech(events))
 
@@ -40,7 +40,7 @@ class UbuCalendarSkill(MycroftSkill):
             str(message.data['day']))
         events = [str(Event(event)) for event in events['events']]
         if len(events) == 0:
-            self.speak_dialog("no.events.dialog")
+            self.speak_dialog("no.events")
         else:
             self.speak(util.text_to_speech(events))
 
@@ -59,7 +59,7 @@ class UbuCalendarSkill(MycroftSkill):
 
             course_events = [str(event) for event in course_events]
             if len(course_events) == 0:
-                self.speak_dialog("no.events.dialog")
+                self.speak_dialog("no.events")
             else:
                 self.speak(util.text_to_speech(course_events))
         else:
