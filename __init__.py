@@ -18,14 +18,21 @@ class UbuCalendarSkill(MycroftSkill):
         self.months = {'enero': 1, 'febrero': 2, 'marzo': 3, 'abril': 4, 'mayo': 5,
                        'junio': 6, 'julio': 7, 'agosto': 8, 'septiembre': 9,
                        'octubre': 10, 'noviembre': 11, 'diciembre': 12}
+        self.month = None
+        self.web_service = None
 
     def initialize(self):
-        """Initializes 
+        """Initializes
         """
         self.web_service = util.get_data_from_server()
 
     @intent_handler('UpcomingEvents.intent')
-    def handle_upcoming_events_intent(self, message):
+    def handle_upcoming_events_intent(self, _):
+        """Reads all future events
+
+        Args:
+            message: Mycroft message data
+        """
         events = self.web_service.get_calendar_upcoming_view()
         events = [str(Event(event)) for event in events['events']]
         if len(events) == 0:
@@ -35,6 +42,11 @@ class UbuCalendarSkill(MycroftSkill):
 
     @intent_handler('DayEvents.intent')
     def handle_day_events_intent(self, message):
+        """Reads all events for a specified date
+
+        Args:
+            message: Mycroft message data
+        """
         self.month = str(self.months[message.data['month']])
         events = self.web_service.get_calendar_day_view(str(message.data['year']), self.month,
             str(message.data['day']))
@@ -46,6 +58,11 @@ class UbuCalendarSkill(MycroftSkill):
 
     @intent_handler('CourseEvents.intent')
     def handle_course_events_intent(self, message):
+        """Reads all events for a course
+
+        Args:
+            message: Mycroft message data
+        """
         course = message.data['course']
         course_id = util.get_course_id_by_name(course, self.web_service.get_user_courses())
         if course_id:
@@ -67,6 +84,11 @@ class UbuCalendarSkill(MycroftSkill):
 
     @intent_handler('RecentUpdates.intent')
     def handle_course_updates(self, message):
+        """Reads all changes for a course that happenned in the last day
+
+        Args:
+            message: Mycroft message data
+        """
         course = message.data['course']
         course_id = util.get_course_id_by_name(course, self.web_service.get_user_courses())
         cmids = self.web_service.get_course_updates_since(course_id,
@@ -79,4 +101,9 @@ class UbuCalendarSkill(MycroftSkill):
 
 
 def create_skill():
+    """Creates and returns a Mycroft skill
+
+    Returns:
+        UbuCalendarSkill: A Mycroft Skill to interact with Moodle's calendar
+    """
     return UbuCalendarSkill()
